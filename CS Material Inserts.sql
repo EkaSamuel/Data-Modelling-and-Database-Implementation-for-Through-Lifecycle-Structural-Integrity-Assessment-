@@ -88,6 +88,49 @@ JOIN PieceOfMaterial pom
     ON pom.piece_of_material_id = cm.piece_of_material_id
 ORDER BY cm.piece_of_material_id;
 
+
+
+-- DESIGN CHANGE TO REMOVE Characterized_Material
+
+-- Drop the Characterized_Material table
+DROP TABLE IF EXISTS Characterized_Material;
+
+-- PieceOfMaterial — drop the characterised duplicates
+-- Only supplied materials remain (ids 1-14).
+DELETE FROM PieceOfMaterial
+WHERE piece_of_material_id BETWEEN 15 AND 28
+  AND material_type = 'Characterized_Material';
+  
+  SELECT*
+  FROM PieceOfMaterial;
+  
+COMMIT;
+  
+SELECT* FROM
+PieceOfMaterial;
+  
+SELECT* FROM
+MaterialRole;
+
+
+
+  -- Should return 14 rows (ids 1-14)
+SELECT piece_of_material_id, material_type, material_name
+FROM PieceOfMaterial
+ORDER BY piece_of_material_id;
+
+
+SELECT
+    TABLE_NAME,
+    COLUMN_NAME,
+    CONSTRAINT_NAME,
+    REFERENCED_TABLE_NAME,
+    REFERENCED_COLUMN_NAME
+FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+WHERE REFERENCED_TABLE_SCHEMA = 'fulldatabase'
+  AND REFERENCED_TABLE_NAME   = 'PieceOfMaterial';
+
+
 -- 03
 -- Tensile Specimen
 INSERT INTO PieceOfMaterial (piece_of_material_id, material_type, material_name) VALUES
